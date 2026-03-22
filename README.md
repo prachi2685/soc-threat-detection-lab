@@ -26,5 +26,3 @@ Splunk, Kali Linux, Ubuntu, Wireshark, Nmap
 ##  Outcome
 Successfully detected and analysed brute-force attacks using SIEM.
 
-<img width="896" height="342" alt="image" src="https://github.com/user-attachments/assets/726ecc18-a7b4-4bb6-9091-27324716bd7e" />
-
