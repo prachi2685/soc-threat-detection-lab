@@ -1,30 +1,32 @@
-# soc-threat-detection-lab
-SOC lab detecting SSH brute-force attacks using Splunk SIEM
-##  Overview
-This project demonstrates detection of SSH brute-force attacks using Splunk SIEM in a simulated SOC environment.
+# SOC Threat Detection Lab
 
-##  Lab Setup
+## Project Overview
+This project demonstrates a Security Operations Center (SOC) lab setup where I simulated and detected SSH brute-force attacks.
+
+## Tools Used
 - Kali Linux (Attacker)
 - Ubuntu (Target)
-- Splunk Enterprise
-- VirtualBox
+- Splunk SIEM
+- Hydra (Brute-force attack)
+- Nmap (Network scanning)
+- Wireshark (Packet analysis)
 
-##  Steps Performed
-- Collected Linux authentication logs
-- Forwarded logs to Splunk
-- Created SPL queries to detect failed login attempts
-- Generated alerts for suspicious activity
-- Simulated brute-force attack using Hydra from Kali Linux
+## Attack Simulation
+- Performed SSH brute-force attack using Hydra from Kali Linux
+- Targeted Ubuntu machine with weak credentials
 
-##  Detection Logic
-- Multiple failed login attempts from same IP
-- Followed by successful login
+## Detection and Analysis
+- Monitored logs using Splunk SIEM
+- Identified multiple failed login attempts
+- Created search queries to detect brute-force patterns
 
-##  Tools Used
-Splunk, Kali Linux, Ubuntu, Wireshark, Nmap
+## Key Learning
+- Understanding of SOC workflow
+- Log analysis and correlation
+- Detection of brute-force attacks
+- Hands-on experience with SIEM tools
 
-##  Outcome
-Successfully detected and analysed brute-force attacks using SIEM.
-
-![Failed Login Detection](failed-login-detection.png)
-
+## Future Improvements
+- Add alerting rules in Splunk
+- Automate detection
+- Expand to other attack types
