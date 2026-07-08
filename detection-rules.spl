@@ -1,0 +1,20 @@
+# SSH Brute-Force Detection
+# Detects multiple failed SSH login attempts from the same source IP
+
+index=main sourcetype=linux_secure "Failed password"
+| stats count by src_ip, user
+| where count > 5
+| sort - count
+
+# Alert Rule - High Volume Failed Logins
+index=main sourcetype=linux_secure "Failed password"
+| bucket _time span=5m
+| stats count by _time, src_ip
+| where count > 10
+
+# Successful Login After Multiple Failures (Potential Brute-Force Success)
+index=main sourcetype=linux_secure
+| eval status=if(match(_raw,"Failed password"),"failure","success")
+| stats count(eval(status="failure")) as failures,
+        count(eval(status="success")) as successes by src_ip
+| where failures > 5 AND successes > 0
