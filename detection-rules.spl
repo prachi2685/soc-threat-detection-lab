@@ -1,20 +1,21 @@
 # SSH Brute-Force Detection
-# Detects multiple failed SSH login attempts from the same source IP
-
+# Counts failed SSH logins per source IP by extracting the attacker IP from the raw event
 index=main sourcetype=linux_secure "Failed password"
-| stats count by src_ip, user
+| rex "from (?<attacker_ip>\d+\.\d+\.\d+\.\d+)"
+| stats count by attacker_ip
+
+# Brute-Force Threshold Alert
+# Only flags a source IP once its failed attempts cross a set limit, cutting out normal typos
+index=main sourcetype=linux_secure "Failed password"
+| rex "from (?<attacker_ip>\d+\.\d+\.\d+\.\d+)"
+| stats count by attacker_ip
 | where count > 5
-| sort - count
-
-# Alert Rule - High Volume Failed Logins
-index=main sourcetype=linux_secure "Failed password"
-| bucket _time span=5m
-| stats count by _time, src_ip
-| where count > 10
 
 # Successful Login After Multiple Failures (Potential Brute-Force Success)
+# Flags a source IP that had many failures followed by a successful login
 index=main sourcetype=linux_secure
+| rex "from (?<attacker_ip>\d+\.\d+\.\d+\.\d+)"
 | eval status=if(match(_raw,"Failed password"),"failure","success")
 | stats count(eval(status="failure")) as failures,
-        count(eval(status="success")) as successes by src_ip
+        count(eval(status="success")) as successes by attacker_ip
 | where failures > 5 AND successes > 0
